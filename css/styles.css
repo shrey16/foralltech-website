@@ -61,6 +61,9 @@ a { color: inherit; }
   font-family: var(--display);
   font-size: 1.6rem; font-weight: 700;
   color: var(--amber);
+  line-height: 1;
+  position: relative;
+  top: -0.12em;
 }
 .logo-text {
   font-weight: 700; letter-spacing: 0.02em;
@@ -193,7 +196,10 @@ h2 {
 
 #device-stage svg { overflow: visible; }
 
-/* ---- SPECTRUM DISPLAY (standalone fixed element) ---- */
+/* Mobile-only inline spectrum (hidden on desktop) */
+.mobile-spectrum { display: none; }
+
+/* ---- SPECTRUM DISPLAY (standalone fixed element, desktop only) ---- */
 #spectrum-display {
   position: fixed;
   top: 50%;
@@ -552,6 +558,12 @@ h2 {
     opacity: 1 !important;
   }
   #spectrum-display { display: none; }
+
+  .mobile-spectrum {
+    display: block !important;
+    width: 100%;
+    margin: 1.5rem 0 0;
+  }
 
   #section-draw-in,
   #section-beam,
