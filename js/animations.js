@@ -251,38 +251,79 @@ const SPECTRUM = {
    ---------------------------------------- */
 
 function setupSpectrum() {
+  const spectrumEl = document.getElementById('spectrum-display');
+
+  // Get the device's screen position so we can start the spectrum there.
+  // The device is at left:72%, top:58% after the beam slide.
+  // The screen bezel is roughly centered in the device SVG.
+  // We'll start the spectrum small, overlaying the device screen, then grow it out.
+
+  // Set initial state: spectrum starts at device screen location, small.
+  // Use left + translateX for both start and end so GSAP can interpolate smoothly.
+  // Final position: right: 5vw → equivalent to left: calc(100vw - 5vw - width)
+  // At full size (42vw), that's left: 53vw. We'll use left-based positioning throughout.
+  gsap.set(spectrumEl, {
+    position: 'fixed',
+    top: '52%',
+    right: 'auto',
+    left: '62%',
+    width: '12vw',
+    transform: 'translate(-50%, -50%)',
+    opacity: 0,
+  });
+
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: '#section-spectrum',
       start: 'top top',
-      end: '+=1500',
+      end: '+=2000',
       pin: true,
       scrub: 0.5,
     }
   });
 
-  // Phase 1: Spectrum graph appears and draws (0-0.45)
-  tl.fromTo('#spectrum-display', { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0);
-  draw(tl, '#spectrum-line', 0.3, 'none', 0.02);
+  // Phase 1: Mini spectrum draws on the device screen (0-0.12)
+  tl.fromTo('#screen-spectrum', { opacity: 0 }, { opacity: 1, duration: 0.04 }, 0);
+  draw(tl, '#screen-spectrum-line', 0.1, 'none', 0);
 
-  // Axis labels
-  tl.fromTo('#axis-x', { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.08);
-  tl.fromTo('#axis-y', { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.08);
+  // Phase 2: Large spectrum appears at device screen location, small (0.10-0.15)
+  tl.to(spectrumEl, { opacity: 1, duration: 0.05 }, 0.10);
+  // Pre-draw the line at tiny scale so it's visible during zoom
+  draw(tl, '#spectrum-line', 0.15, 'none', 0.10);
 
-  // Mini spectrum on device screen
-  tl.fromTo('#screen-spectrum', { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0.1);
-  draw(tl, '#screen-spectrum-line', 0.2, 'none', 0.1);
+  // Phase 3: Spectrum zooms out from device to its final right-side position (0.15-0.40)
+  tl.to(spectrumEl, {
+    left: '55%',
+    top: '50%',
+    width: 'min(42vw, 520px)',
+    transform: 'translate(-50%, -50%)',
+    duration: 0.25,
+    ease: 'power2.inOut',
+  }, 0.15);
 
-  // Phase 2: Text fades in (0.5-0.7)
+  // Fade out mini screen spectrum as the big one takes over
+  tl.to('#screen-spectrum', { opacity: 0, duration: 0.08 }, 0.18);
+
+  // Fade out the device as the graph grows
+  tl.to('#device-stage', { opacity: 0.15, duration: 0.15 }, 0.20);
+
+  // Phase 4: Axis labels fade in once graph is at full size (0.38-0.48)
+  tl.fromTo('#axis-x', { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.40);
+  tl.fromTo('#axis-y', { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.40);
+
+  // Phase 5: Text fades in (0.50-0.65)
   tl.fromTo('#spectrum-text',
     { opacity: 0, y: 20 },
     { opacity: 1, y: 0, duration: 0.15 },
-    0.5
+    0.50
   );
 
-  // Phase 3: Text fades out at end — but spectrum STAYS visible
+  // Phase 6: Text fades out at end — spectrum STAYS visible for use-cases
   tl.to('#spectrum-text', { opacity: 0, duration: 0.1 }, 0.88);
   tl.to('#scatter-rays line', { opacity: 0.15, duration: 0.1 }, 0.88);
+
+  // Fully hide device by end
+  tl.to('#device-stage', { opacity: 0, duration: 0.1 }, 0.85);
 }
 
 /* ----------------------------------------
