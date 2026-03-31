@@ -161,8 +161,8 @@ function setupBeam() {
   });
 
   // Phase 1: Device slides right and grows (0 - 0.25)
-  tl.fromTo('#device-stage',
-    { left: '50%', top: '42%', width: 'min(30vw, 360px)' },
+  // Use `to` — device is already at left:50%, top:42% from CSS. No fromTo snap.
+  tl.to('#device-stage',
     { left: '70%', top: '50%', width: 'min(48vw, 540px)', duration: 0.25, ease: 'power1.inOut' },
     0
   );
@@ -214,27 +214,30 @@ function setupSpectrum() {
     }
   });
 
-  // Phase 1: Spectrum appears small, at device screen location (0 - 0.05)
+  // Pre-set the spectrum line to fully drawn (no redraw animation — it should
+  // look like the same line that was on the device screen, just growing bigger)
+  tl.set('#spectrum-line', { attr: { 'stroke-dashoffset': 0 } }, 0);
+
+  // Phase 1: Spectrum appears at device screen location, small (0 - 0.05)
+  // Simultaneously hide the mini screen spectrum so it looks like one continuous element
   tl.fromTo(el,
     { opacity: 0, left: '70%', top: '45%', width: '10vw', xPercent: -50, yPercent: -50 },
-    { opacity: 1, duration: 0.05 },
+    { opacity: 1, duration: 0.03 },
     0
   );
-  // Start drawing the line while still small
-  draw(tl, '#spectrum-line', 0.20, 'none', 0);
+  tl.to('#screen-spectrum', { opacity: 0, duration: 0.03 }, 0);
 
-  // Phase 2: Spectrum zooms out to full size on right side (0.05 - 0.35)
+  // Phase 2: Spectrum grows to full size on right side (0.03 - 0.35)
   tl.to(el, {
     left: '72%',
     top: '50%',
     width: 'min(42vw, 520px)',
-    duration: 0.30,
+    duration: 0.32,
     ease: 'power2.out',
-  }, 0.05);
+  }, 0.03);
 
-  // Device fades as spectrum takes over (0.10 - 0.30)
-  tl.to('#screen-spectrum', { opacity: 0, duration: 0.08 }, 0.10);
-  tl.to('#device-stage', { opacity: 0, duration: 0.20 }, 0.12);
+  // Device fades away as spectrum takes over (0.05 - 0.25)
+  tl.to('#device-stage', { opacity: 0, duration: 0.20 }, 0.08);
 
   // Phase 3: Axis labels fade in (0.32 - 0.42)
   tl.fromTo('#axis-x', { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.35);
