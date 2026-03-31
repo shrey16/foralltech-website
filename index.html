@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ForAll Sense | Instant Counterfeit Drug Detection</title>
+  <meta name="description" content="ForAll Sense — a handheld Raman spectrometer for instant counterfeit drug detection. Same science as a $100k lab instrument. $100.">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=7">
+</head>
+<body>
+
+  <!-- ============ NAV ============ -->
+  <nav id="nav-bar">
+    <a href="/" class="nav-logo">
+      <span class="logo-mark" aria-hidden="true">&#8704;</span>
+      <span class="logo-text">ForAll Sense</span>
+    </a>
+    <div class="nav-links">
+      <a href="#section-spectrum">Technology</a>
+      <a href="#section-science">Team</a>
+      <a href="#section-waitlist" class="btn btn-primary btn-sm">Join Waitlist</a>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <section id="section-hero">
+    <h1>Instant counterfeit<br>drug detection.</h1>
+    <p class="hero-sub">Powered by light. No reagents. No lab. Just point and know.</p>
+    <div class="scroll-cue" aria-hidden="true">
+      <span>Scroll to explore</span>
+      <span class="scroll-line"></span>
+    </div>
+  </section>
+
+  <!-- ============ DEVICE STAGE (fixed, animated) ============ -->
+  <div id="device-stage" aria-hidden="true">
+    <svg id="spectrometer" viewBox="-50 -120 700 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Base Unit -->
+      <g id="base-unit">
+        <path id="base-bottom" d="M180,280 L180,340 Q180,350 190,350 L410,350 Q420,350 420,340 L420,280 Q420,270 410,270 L190,270 Q180,270 180,280 Z" stroke="#E3E2E3" stroke-width="1.5" pathLength="1"/>
+        <path id="base-top" d="M180,210 L180,265 Q180,270 190,270 L410,270 Q420,270 420,265 L420,210 Q420,200 410,200 L190,200 Q180,200 180,210 Z" stroke="#E3E2E3" stroke-width="1.5" pathLength="1"/>
+        <g id="vent-lines">
+          <line x1="200" y1="290" x2="240" y2="290" stroke="#E3E2E3" stroke-width="0.8" pathLength="1"/>
+          <line x1="200" y1="298" x2="240" y2="298" stroke="#E3E2E3" stroke-width="0.8" pathLength="1"/>
+          <line x1="200" y1="306" x2="240" y2="306" stroke="#E3E2E3" stroke-width="0.8" pathLength="1"/>
+          <line x1="200" y1="314" x2="240" y2="314" stroke="#E3E2E3" stroke-width="0.8" pathLength="1"/>
+        </g>
+        <g id="base-ports">
+          <rect x="395" y="285" width="15" height="8" rx="2" stroke="#E3E2E3" stroke-width="0.8" pathLength="1"/>
+          <rect x="395" y="300" width="15" height="8" rx="2" stroke="#E3E2E3" stroke-width="0.8" pathLength="1"/>
+          <circle cx="402" cy="320" r="4" stroke="#E3E2E3" stroke-width="0.8" pathLength="1"/>
+        </g>
+      </g>
+      <!-- Display -->
+      <g id="base-display">
+        <rect id="screen-bezel" x="250" y="210" width="150" height="50" rx="4" stroke="#E3E2E3" stroke-width="1.2" pathLength="1"/>
+        <rect id="screen-bg" x="255" y="215" width="140" height="40" rx="3" fill="#1a1a1c" stroke="none" opacity="0"/>
+        <g id="screen-spectrum" opacity="0">
+          <polyline id="screen-spectrum-line" points="260,250 270,248 280,245 285,230 288,245 295,243 305,240 310,225 313,240 320,242 330,238 340,220 343,238 350,240 360,243 370,245 380,248 390,250" fill="none" stroke="#FFBF00" stroke-width="1" pathLength="1"/>
+        </g>
+        <circle id="screen-status" cx="265" cy="220" r="3" fill="#FFBF00" opacity="0"/>
+      </g>
+      <!-- Cord -->
+      <path id="cord-path" d="M190,235 C140,235 100,220 80,190 C60,160 55,130 60,100 C65,70 80,55 100,50" stroke="#E3E2E3" stroke-width="2" stroke-linecap="round" pathLength="1"/>
+      <!-- Probe -->
+      <g id="scanner-probe">
+        <path id="probe-body" d="M60,50 L60,30 Q60,15 75,15 L160,15 Q175,15 175,30 L175,50 Q175,60 170,65 L155,80 Q150,85 150,95 L150,130 Q150,140 140,140 L95,140 Q85,140 85,130 L85,95 Q85,85 80,80 L65,65 Q60,60 60,50 Z" stroke="#E3E2E3" stroke-width="1.5" pathLength="1"/>
+        <path id="trigger-btn" d="M105,85 Q100,85 100,90 L100,115 Q100,120 105,120 L130,120 Q135,120 135,115 L135,90 Q135,85 130,85 Z" stroke="#FFBF00" stroke-width="1.2" pathLength="1"/>
+        <circle id="probe-lens-outer" cx="117" cy="22" r="18" stroke="#E3E2E3" stroke-width="1.2" pathLength="1"/>
+        <circle id="probe-lens-inner" cx="117" cy="22" r="10" stroke="#FFBF00" stroke-width="1" pathLength="1"/>
+        <circle id="lens-glint" cx="117" cy="22" r="6" fill="#FFBF00" opacity="0"/>
+        <rect id="probe-display" x="92" y="40" width="50" height="20" rx="3" stroke="#E3E2E3" stroke-width="0.8" pathLength="1"/>
+      </g>
+      <!-- Internal Optics -->
+      <g id="internal-optics" opacity="0">
+        <rect x="95" y="28" width="14" height="8" rx="2" fill="none" stroke="#FFBF00" stroke-width="1"/>
+        <g id="diffraction-grating">
+          <line x1="125" y1="30" x2="130" y2="50" stroke="#FFBF00" stroke-width="0.6"/>
+          <line x1="128" y1="30" x2="133" y2="50" stroke="#FFBF00" stroke-width="0.6"/>
+          <line x1="131" y1="30" x2="136" y2="50" stroke="#FFBF00" stroke-width="0.6"/>
+          <line x1="134" y1="30" x2="139" y2="50" stroke="#FFBF00" stroke-width="0.6"/>
+        </g>
+        <g id="detector-array">
+          <rect x="145" y="30" width="18" height="25" rx="2" fill="none" stroke="#FFBF00" stroke-width="1"/>
+          <line x1="148" y1="35" x2="148" y2="50" stroke="#FFBF00" stroke-width="0.4"/>
+          <line x1="151" y1="35" x2="151" y2="50" stroke="#FFBF00" stroke-width="0.4"/>
+          <line x1="154" y1="35" x2="154" y2="50" stroke="#FFBF00" stroke-width="0.4"/>
+          <line x1="157" y1="35" x2="157" y2="50" stroke="#FFBF00" stroke-width="0.4"/>
+          <line x1="160" y1="35" x2="160" y2="50" stroke="#FFBF00" stroke-width="0.4"/>
+        </g>
+        <line x1="109" y1="32" x2="117" y2="22" stroke="#FFBF00" stroke-width="0.8" stroke-dasharray="3,2"/>
+        <line x1="125" y1="40" x2="145" y2="40" stroke="#FFBF00" stroke-width="0.8" stroke-dasharray="3,2"/>
+      </g>
+      <!-- Beam Group -->
+      <g id="beam-group" opacity="0">
+        <line id="main-beam" x1="117" y1="4" x2="117" y2="-60" stroke="#FFBF00" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
+        <line id="beam-glow" x1="117" y1="4" x2="117" y2="-60" stroke="#FFBF00" stroke-width="6" stroke-linecap="round" opacity="0"/>
+        <g id="sample-target" transform="translate(117, -80)">
+          <circle id="sample-dot" r="8" fill="none" stroke="#FFBF00" stroke-width="1.5" opacity="0"/>
+          <circle id="sample-core" r="4" fill="#FFBF00" opacity="0"/>
+        </g>
+        <g id="scatter-rays" transform="translate(117, -80)">
+          <line x1="0" y1="0" x2="-25" y2="-20" stroke="#FFBF00" stroke-width="0.8" opacity="0" pathLength="1"/>
+          <line x1="0" y1="0" x2="25" y2="-20" stroke="#FFBF00" stroke-width="0.8" opacity="0" pathLength="1"/>
+          <line x1="0" y1="0" x2="-30" y2="-5" stroke="#FFBF00" stroke-width="0.8" opacity="0" pathLength="1"/>
+          <line x1="0" y1="0" x2="30" y2="-5" stroke="#FFBF00" stroke-width="0.8" opacity="0" pathLength="1"/>
+          <line x1="0" y1="0" x2="-20" y2="15" stroke="#FFBF00" stroke-width="0.8" opacity="0" pathLength="1"/>
+          <line x1="0" y1="0" x2="20" y2="15" stroke="#FFBF00" stroke-width="0.8" opacity="0" pathLength="1"/>
+        </g>
+      </g>
+      <!-- Sample Area (pill for use cases) -->
+      <g id="sample-area" opacity="0" transform="translate(117, -80)">
+        <rect id="sample-pill" x="-16" y="-6" width="32" height="12" rx="6" fill="none" stroke="#E3E2E3" stroke-width="1.2"/>
+      </g>
+    </svg>
+
+  </div>
+
+  <!-- ============ SPECTRUM DISPLAY (standalone fixed, visible during spectrum + usecases) ============ -->
+  <div id="spectrum-display" aria-hidden="true">
+    <svg id="spectrum-svg" viewBox="0 0 500 220" fill="none">
+      <text id="axis-x" x="250" y="210" text-anchor="middle" fill="#b4ab9d" font-size="10" font-family="DM Sans, sans-serif" opacity="0">RAMAN SHIFT (cm&#8315;&#185;)</text>
+      <text id="axis-y" x="8" y="100" text-anchor="middle" fill="#b4ab9d" font-size="10" font-family="DM Sans, sans-serif" transform="rotate(-90, 8, 100)" opacity="0">INTENSITY</text>
+      <polyline id="spectrum-line" points="10,180 30,178 50,175 70,172 90,170 100,165 108,140 112,100 115,65 118,100 122,140 130,160 150,165 170,162 180,158 188,130 192,90 195,55 198,90 202,130 210,155 230,160 250,158 260,150 268,120 272,80 275,45 278,80 282,120 290,150 310,158 330,160 350,162 370,165 390,170 410,172 430,175 450,178 470,180 490,180" fill="none" stroke="#FFBF00" stroke-width="2" pathLength="1"/>
+      <text id="spectrum-label" x="250" y="20" text-anchor="middle" fill="#FFBF00" font-size="12" font-weight="600" font-family="'Plus Jakarta Sans', sans-serif" opacity="0"></text>
+    </svg>
+  </div>
+
+  <!-- ============ SECTION 1: DRAW-IN ============ -->
+  <section id="section-draw-in">
+    <div id="draw-in-text" class="section-text-block center-text">
+      <p class="eyebrow">&#8704; Technologies</p>
+      <h2>ForAll Sense</h2>
+      <p class="sub">A handheld, portable Raman spectrometer that identifies drugs in seconds.</p>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 2: BEAM ============ -->
+  <section id="section-beam">
+    <div class="pin-left">
+      <p class="eyebrow">How it works</p>
+      <h2>Shoot a beam of light.<br>Read the molecular fingerprint.</h2>
+      <p class="sub">Raman spectroscopy identifies substances by their unique light signature. No reagents. No consumables. No sample prep.</p>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 3: SPECTRUM ============ -->
+  <section id="section-spectrum">
+    <div id="spectrum-text" class="pin-left">
+      <p class="eyebrow">The signal</p>
+      <h2>Every drug has a<br>unique fingerprint.</h2>
+      <div class="qual-quant">
+        <div class="qq-item">
+          <span class="qq-label">Qualitative</span>
+          <p>Is this the real drug?</p>
+        </div>
+        <div class="qq-item">
+          <span class="qq-label">Quantitative</span>
+          <p>Is the dosage correct?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 4: USE CASES ============ -->
+  <section id="section-usecases">
+    <div class="pin-left">
+      <div class="usecase-item">
+        <span class="uc-tag pass">&#10003; AUTHENTIC</span>
+        <h3>Is this paracetamol real?</h3>
+        <p>Paracetamol 500mg verified. Chemical fingerprint matches reference.</p>
+      </div>
+      <div class="usecase-item">
+        <span class="uc-tag fail">&#10007; COUNTERFEIT</span>
+        <h3>Is this antimalarial genuine?</h3>
+        <p>Active ingredient missing. No artemisinin detected in sample.</p>
+      </div>
+      <div class="usecase-item">
+        <span class="uc-tag warn">&#9888; UNDERDOSED</span>
+        <h3>Is the dosage correct?</h3>
+        <p>Only 60% of labeled amount. Substandard formulation detected.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 5: PRICE ============ -->
+  <section id="section-price">
+    <div class="price-block">
+      <p class="eyebrow">The price</p>
+      <div class="price-compare">
+        <div class="price-old">
+          <span class="price-label">Lab Raman spectrometer</span>
+          <span class="price-num">$100,000</span>
+        </div>
+        <div class="price-arrow" aria-hidden="true">&rarr;</div>
+        <div class="price-new">
+          <span class="price-label">ForAll Sense</span>
+          <span class="price-num">$100</span>
+        </div>
+      </div>
+      <p class="sub">Same science. 1/1000th the price.<br>Field-ready. Handheld. No training required.</p>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 6: SCIENCE + FOUNDERS ============ -->
+  <section id="section-science">
+    <div class="science-content">
+      <div class="science-top">
+        <p class="eyebrow">The science</p>
+        <h2>Built on decades of proven research.</h2>
+        <p class="sub">Handheld Raman has been validated for counterfeit drug detection in peer-reviewed studies. Our ML models decode the spectrum — identifying compounds, flagging counterfeits, quantifying dosage.</p>
+        <div class="paper-links">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/27043140/" target="_blank" rel="noopener" class="paper-link">
+            <span class="paper-tag">Study</span>
+            Raman barcode method — 100% counterfeit identification
+          </a>
+          <a href="https://pubmed.ncbi.nlm.nih.gov/31986222/" target="_blank" rel="noopener" class="paper-link">
+            <span class="paper-tag">FDA</span>
+            Handheld Raman for rapid field screening
+          </a>
+        </div>
+      </div>
+      <div class="founders-row">
+        <div class="founder">
+          <span class="founder-role">CTO / President</span>
+          <h3>Rajas Poorna</h3>
+          <p>BioE PhD, Georgia Tech (Bhamla Lab). Low-cost point-of-care diagnostics using Raman spectroscopy. No reagents, no lab.</p>
+        </div>
+        <div class="founder">
+          <span class="founder-role">CEO</span>
+          <h3>Shrey Gupta</h3>
+          <p>AI engineer. Previously founded Kaabil (vernacular AI tutoring) and NPrep (AI-first nursing entrance prep). Building the commercial and distribution engine for ForAll Sense.</p>
+        </div>
+      </div>
+      <p class="institutions">From IISc Bangalore and Georgia Tech.</p>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 7: WAITLIST ============ -->
+  <section id="section-waitlist">
+    <div class="waitlist-content">
+      <h2>Stop counterfeits at the source.</h2>
+      <form id="waitlist-form" class="waitlist-form">
+        <div class="form-row">
+          <input type="email" name="email" placeholder="you@example.com" required>
+          <button type="submit" class="btn btn-primary">Join Waitlist</button>
+        </div>
+        <p id="form-status" aria-live="polite"></p>
+      </form>
+      <div id="waitlist-success" hidden>
+        <p class="success-msg">You're on the list. We'll be in touch.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer id="footer">
+    <div class="footer-inner">
+      <span class="footer-mark" aria-hidden="true">&#8704;</span>
+      <span>ForAll Technologies</span>
+      <span class="footer-sep">|</span>
+      <span>Bangalore & Atlanta</span>
+      <span class="footer-sep">|</span>
+      <a href="mailto:contact@foralltech.in">contact@foralltech.in</a>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/animations.js?v=7"></script>
+</body>
+</html>
