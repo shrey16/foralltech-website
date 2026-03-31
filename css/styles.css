@@ -585,11 +585,14 @@ h2 {
   font-size: 0.82rem;
 }
 .footer-mark {
+  display: inline-flex;
+  align-items: center;
   font-family: var(--display);
   font-size: 1.3rem;
   font-weight: 700;
   color: var(--amber);
   line-height: 1;
+  vertical-align: middle;
 }
 .footer-sep { opacity: 0.3; }
 #footer a {
