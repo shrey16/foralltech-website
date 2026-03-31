@@ -541,6 +541,7 @@ h2 {
     padding: 0.8rem 1.2rem;
   }
   .nav-links { gap: 1rem; }
+  .nav-links a:not(.btn) { display: none; }
 
   #device-stage {
     position: relative;
