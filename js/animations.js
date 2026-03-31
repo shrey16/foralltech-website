@@ -169,14 +169,16 @@ function setupDrawIn() {
    ---------------------------------------- */
 
 function setupBeam() {
-  // Slide device to the right when beam section approaches
+  // Slide device right + scale up as beam section approaches
   gsap.to('#device-stage', {
-    left: '70%',
-    top: '40%',
+    left: '68%',
+    top: '42%',
+    width: 'min(52vw, 580px)',
+    ease: 'power1.inOut',
     scrollTrigger: {
       trigger: '#section-beam',
       start: 'top 90%',
-      end: 'top 30%',
+      end: 'top 20%',
       scrub: true,
     }
   });
