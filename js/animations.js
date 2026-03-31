@@ -313,10 +313,11 @@ function setupUseCases() {
     }
   });
 
-  // End: fade out last card + spectrum
-  tl.to(items[count - 1], { opacity: 0, duration: 0.05 }, 0.90);
-  tl.to('#spectrum-display', { opacity: 0, duration: 0.08 }, 0.90);
-  tl.to('#spectrum-label', { opacity: 0, duration: 0.05 }, 0.90);
+  // End: fade out last card + spectrum + hide completely
+  tl.to(items[count - 1], { opacity: 0, duration: 0.05 }, 0.85);
+  tl.to('#spectrum-display', { opacity: 0, duration: 0.08 }, 0.85);
+  tl.to('#spectrum-label', { opacity: 0, duration: 0.05 }, 0.85);
+  tl.set('#spectrum-display', { visibility: 'hidden' }, 0.95);
 }
 
 /* ========================================

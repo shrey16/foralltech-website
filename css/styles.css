@@ -338,7 +338,7 @@ h2 {
 /* ---- PRICE ---- */
 #section-price {
   justify-content: center;
-  z-index: 55;
+  z-index: 60;
 }
 .price-block {
   text-align: center;
