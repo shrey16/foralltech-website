@@ -200,13 +200,9 @@ h2 {
 .mobile-spectrum { display: none; }
 
 /* ---- SPECTRUM DISPLAY (standalone fixed element, desktop only) ---- */
-/* Initial state set by GSAP — these are just fallbacks */
+/* Positioned entirely by GSAP — CSS just sets z-index and pointer-events */
 #spectrum-display {
   position: fixed;
-  top: 50%;
-  left: 55%;
-  width: min(42vw, 520px);
-  transform: translate(-50%, -50%);
   z-index: 55;
   pointer-events: none;
   opacity: 0;

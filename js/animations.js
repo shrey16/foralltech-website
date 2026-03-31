@@ -1,6 +1,5 @@
 /* ========================================
    ForAll Sense — Pinned Scroll Animations
-   Each section gets its own ScrollTrigger with pin: true
    ======================================== */
 
 gsap.registerPlugin(ScrollTrigger);
@@ -27,7 +26,6 @@ function init() {
   setupWaitlistForm();
 }
 
-// Init after fonts load, with a timeout fallback
 if (document.fonts && document.fonts.ready) {
   Promise.race([
     document.fonts.ready,
@@ -37,9 +35,7 @@ if (document.fonts && document.fonts.ready) {
   document.addEventListener('DOMContentLoaded', init);
 }
 
-/* ----------------------------------------
-   SVG Init
-   ---------------------------------------- */
+/* ---- SVG helpers ---- */
 
 function initSVGPaths() {
   document.querySelectorAll('[pathLength="1"]').forEach(el => {
@@ -59,12 +55,11 @@ function draw(tl, sel, dur, ease, pos) {
 function drawAll(tl, sel, dur, stagger, pos) {
   tl.fromTo(sel,
     { attr: { 'stroke-dashoffset': 1 } },
-    { attr: { 'stroke-dashoffset': 0 }, duration: dur, stagger: stagger, ease: 'none' },
+    { attr: { 'stroke-dashoffset': 0 }, duration: dur, stagger, ease: 'none' },
     pos
   );
 }
 
-/* Static fallback for mobile / reduced-motion */
 function showStaticDevice() {
   gsap.set('[pathLength="1"]', { attr: { 'stroke-dashoffset': 0 } });
   gsap.set('#device-stage', { opacity: 1 });
@@ -74,11 +69,21 @@ function showStaticDevice() {
   gsap.set('.usecase-item', { opacity: 1, y: 0 });
 }
 
-/* ----------------------------------------
-   HERO — fades out on scroll
-   ---------------------------------------- */
+/* ---- Spectrum morph data ---- */
+
+const SPECTRUM = {
+  authentic:   '10,180 30,178 50,175 70,172 90,170 100,165 108,140 112,100 115,65 118,100 122,140 130,160 150,165 170,162 180,158 188,130 192,90 195,55 198,90 202,130 210,155 230,160 250,158 260,150 268,120 272,80 275,45 278,80 282,120 290,150 310,158 330,160 350,162 370,165 390,170 410,172 430,175 450,178 470,180 490,180',
+  counterfeit: '10,180 30,179 50,178 70,176 90,174 100,172 108,170 112,168 115,170 118,172 122,174 130,170 150,155 170,120 180,85 188,60 192,85 198,120 202,155 210,170 230,174 250,172 260,174 268,176 272,178 275,176 278,174 282,170 290,160 310,140 330,165 350,170 370,174 390,176 410,178 430,179 440,179 450,180 470,180 490,180',
+  underdosed:  '10,180 30,179 50,177 70,175 90,174 100,171 108,156 112,132 115,111 118,132 122,156 130,168 150,171 170,169 180,167 188,150 192,126 195,105 198,126 202,150 210,165 230,168 250,167 260,162 268,144 272,120 275,99 278,120 282,144 290,162 310,167 330,168 350,169 370,171 390,174 410,175 430,177 450,179 470,180 490,180',
+  labels: ['Paracetamol 500mg — Match', 'Artesunate — No match', 'Amoxicillin 250mg — Underdosed'],
+};
+
+/* ========================================
+   HERO — fades out, device fades in
+   ======================================== */
 
 function setupHero() {
+  // Hero fades out as user scrolls
   gsap.to('#section-hero', {
     opacity: 0,
     scrollTrigger: {
@@ -89,7 +94,7 @@ function setupHero() {
     }
   });
 
-  // Fade in device stage as hero scrolls away
+  // Device fades in as hero fades out
   gsap.fromTo('#device-stage',
     { opacity: 0 },
     {
@@ -102,26 +107,11 @@ function setupHero() {
       }
     }
   );
-
-  // Hide device stage + spectrum when science section is reached
-  ScrollTrigger.create({
-    trigger: '#section-science',
-    start: 'top 80%',
-    onEnter: () => {
-      gsap.to('#device-stage', { opacity: 0, duration: 0.3 });
-      gsap.to('#spectrum-display', { opacity: 0, duration: 0.3 });
-    },
-    onLeaveBack: () => {
-      gsap.to('#device-stage', { opacity: 1, duration: 0.3 });
-    },
-  });
 }
 
-/* ----------------------------------------
-   SECTION 1: DRAW-IN
-   Pin: 1500px of scroll
-   Device assembles, then headline appears
-   ---------------------------------------- */
+/* ========================================
+   SECTION 1: DRAW-IN — device assembles
+   ======================================== */
 
 function setupDrawIn() {
   const tl = gsap.timeline({
@@ -134,7 +124,6 @@ function setupDrawIn() {
     }
   });
 
-  // Draw device (0-0.5)
   draw(tl, '#base-bottom', 0.08, 'none', 0);
   draw(tl, '#base-top', 0.06, 'none', 0.04);
   drawAll(tl, '#vent-lines line', 0.03, 0.005, 0.08);
@@ -148,129 +137,72 @@ function setupDrawIn() {
   draw(tl, '#probe-lens-inner', 0.03, 'none', 0.19);
   draw(tl, '#probe-display', 0.03, 'none', 0.19);
 
-  // Headline fade in (0.55-0.75)
   tl.fromTo('#draw-in-text',
     { opacity: 0, y: 30 },
     { opacity: 1, y: 0, duration: 0.15 },
     0.55
   );
-
-  // Headline hold, then fade out (0.85-1.0)
-  tl.to('#draw-in-text',
-    { opacity: 0, duration: 0.15 },
-    0.85
-  );
+  tl.to('#draw-in-text', { opacity: 0, duration: 0.15 }, 0.85);
 }
 
-/* ----------------------------------------
-   SECTION 2: BEAM
-   Pin: 1200px of scroll
-   Beam fires, scatter, optics reveal
-   ---------------------------------------- */
+/* ========================================
+   SECTION 2: BEAM — device slides right + grows, beam fires
+   ======================================== */
 
 function setupBeam() {
-  // Slide device right + scale up as beam section approaches
-  // Use fromTo to lock both ends — prevents GSAP from reading a stale/zero start value
-  gsap.fromTo('#device-stage',
-    { left: '50%', top: '42%', width: 'min(30vw, 360px)' },
-    {
-      left: '72%',
-      top: '58%',
-      width: 'min(52vw, 580px)',
-      ease: 'power1.inOut',
-      scrollTrigger: {
-        trigger: '#section-beam',
-        start: 'top 90%',
-        end: 'top 20%',
-        scrub: true,
-      }
-    }
-  );
-
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: '#section-beam',
       start: 'top top',
-      end: '+=1200',
+      end: '+=1800',
       pin: true,
       scrub: 0.5,
     }
   });
 
-  // Beam group appears (0-0.05)
-  tl.fromTo('#beam-group', { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0);
-  tl.fromTo('#lens-glint', { opacity: 0 }, { opacity: 0.6, duration: 0.08 }, 0.02);
+  // Phase 1: Device slides right and grows (0 - 0.25)
+  tl.fromTo('#device-stage',
+    { left: '50%', top: '42%', width: 'min(30vw, 360px)' },
+    { left: '70%', top: '50%', width: 'min(48vw, 540px)', duration: 0.25, ease: 'power1.inOut' },
+    0
+  );
 
-  // Main beam (0.05-0.15)
-  tl.fromTo('#main-beam', { opacity: 0 }, { opacity: 1, duration: 0.1 }, 0.05);
-  tl.fromTo('#beam-glow', { opacity: 0 }, { opacity: 0.15, duration: 0.1 }, 0.05);
-
-  // Sample (0.15-0.25)
-  tl.fromTo('#sample-dot', { opacity: 0 }, { opacity: 1, duration: 0.1 }, 0.15);
-  tl.fromTo('#sample-core', { opacity: 0 }, { opacity: 0.8, duration: 0.08 }, 0.18);
-
-  // Scatter (0.25-0.4)
-  tl.fromTo('#scatter-rays line', { opacity: 0 }, { opacity: 0.6, duration: 0.1, stagger: 0.02 }, 0.25);
-
-  // Internal optics (0.4-0.6)
-  tl.fromTo('#internal-optics', { opacity: 0 }, { opacity: 0.7, duration: 0.2 }, 0.4);
-
-  // Screen status (0.55-0.6)
-  tl.fromTo('#screen-status', { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0.55);
-
-  // Text panel fades in from start
+  // Text panel fades in on left (0.05 - 0.20)
   tl.fromTo('#section-beam .pin-left',
     { opacity: 0, y: 20 },
     { opacity: 1, y: 0, duration: 0.15 },
-    0.05
+    0.08
   );
+
+  // Phase 2: Beam fires (0.25 - 0.70)
+  tl.fromTo('#beam-group', { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0.25);
+  tl.fromTo('#lens-glint', { opacity: 0 }, { opacity: 0.6, duration: 0.08 }, 0.27);
+  tl.fromTo('#main-beam', { opacity: 0 }, { opacity: 1, duration: 0.1 }, 0.30);
+  tl.fromTo('#beam-glow', { opacity: 0 }, { opacity: 0.15, duration: 0.1 }, 0.30);
+  tl.fromTo('#sample-dot', { opacity: 0 }, { opacity: 1, duration: 0.1 }, 0.38);
+  tl.fromTo('#sample-core', { opacity: 0 }, { opacity: 0.8, duration: 0.08 }, 0.40);
+  tl.fromTo('#scatter-rays line', { opacity: 0 }, { opacity: 0.6, duration: 0.1, stagger: 0.02 }, 0.45);
+  tl.fromTo('#internal-optics', { opacity: 0 }, { opacity: 0.7, duration: 0.15 }, 0.55);
+  tl.fromTo('#screen-status', { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0.60);
+
+  // Phase 3: Mini spectrum draws on device screen (0.65 - 0.80)
+  tl.fromTo('#screen-spectrum', { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0.65);
+  draw(tl, '#screen-spectrum-line', 0.12, 'none', 0.65);
+
+  // Phase 4: Hold, then fade text (0.88 - 1.0)
+  tl.to('#section-beam .pin-left', { opacity: 0, duration: 0.1 }, 0.90);
 }
 
-/* ----------------------------------------
-   SPECTRUM SHAPES for morphing
-   ---------------------------------------- */
-
-const SPECTRUM = {
-  // Normal drug — clear peaks at expected positions
-  authentic: '10,180 30,178 50,175 70,172 90,170 100,165 108,140 112,100 115,65 118,100 122,140 130,160 150,165 170,162 180,158 188,130 192,90 195,55 198,90 202,130 210,155 230,160 250,158 260,150 268,120 272,80 275,45 278,80 282,120 290,150 310,158 330,160 350,162 370,165 390,170 410,172 430,175 450,178 470,180 490,180',
-
-  // Counterfeit — peaks in WRONG places, different shape entirely
-  counterfeit: '10,180 30,179 50,178 70,176 90,174 100,172 108,170 112,168 115,170 118,172 122,174 130,170 150,155 170,120 180,85 188,60 192,85 198,120 202,155 210,170 230,174 250,172 260,174 268,176 272,178 275,176 278,174 282,170 290,160 310,140 330,165 350,170 370,174 390,176 410,178 430,179 440,179 450,180 470,180 490,180',
-
-  // Underdosed — SAME peak positions as authentic but ~60% height
-  underdosed: '10,180 30,179 50,177 70,175 90,174 100,171 108,156 112,132 115,111 118,132 122,156 130,168 150,171 170,169 180,167 188,150 192,126 195,105 198,126 202,150 210,165 230,168 250,167 260,162 268,144 272,120 275,99 278,120 282,144 290,162 310,167 330,168 350,169 370,171 390,174 410,175 430,177 450,179 470,180 490,180',
-
-  labels: ['Paracetamol 500mg — Match', 'Artesunate — No match', 'Amoxicillin 250mg — Underdosed'],
-};
-
-/* ----------------------------------------
-   SECTION 3: SPECTRUM
-   Pin: 1500px of scroll
-   Graph draws on right, text on left
-   Spectrum stays visible into use-cases
-   ---------------------------------------- */
+/* ========================================
+   SECTION 3: SPECTRUM — graph grows out of device, text on left
+   ======================================== */
 
 function setupSpectrum() {
-  const spectrumEl = document.getElementById('spectrum-display');
+  // The spectrum display starts invisible. We'll position it via GSAP at the device's
+  // screen location, then animate it to its final large size on the right.
+  // IMPORTANT: use only percentage-based `left` values so GSAP can interpolate.
 
-  // Get the device's screen position so we can start the spectrum there.
-  // The device is at left:72%, top:58% after the beam slide.
-  // The screen bezel is roughly centered in the device SVG.
-  // We'll start the spectrum small, overlaying the device screen, then grow it out.
-
-  // Set initial state: spectrum starts at device screen location, small.
-  // Use left + translateX for both start and end so GSAP can interpolate smoothly.
-  // Final position: right: 5vw → equivalent to left: calc(100vw - 5vw - width)
-  // At full size (42vw), that's left: 53vw. We'll use left-based positioning throughout.
-  gsap.set(spectrumEl, {
-    position: 'fixed',
-    top: '52%',
-    right: 'auto',
-    left: '62%',
-    width: '12vw',
-    transform: 'translate(-50%, -50%)',
-    opacity: 0,
-  });
+  const el = document.getElementById('spectrum-display');
 
   const tl = gsap.timeline({
     scrollTrigger: {
@@ -282,56 +214,46 @@ function setupSpectrum() {
     }
   });
 
-  // Phase 1: Mini spectrum draws on the device screen (0-0.12)
-  tl.fromTo('#screen-spectrum', { opacity: 0 }, { opacity: 1, duration: 0.04 }, 0);
-  draw(tl, '#screen-spectrum-line', 0.1, 'none', 0);
+  // Phase 1: Spectrum appears small, at device screen location (0 - 0.05)
+  tl.fromTo(el,
+    { opacity: 0, left: '70%', top: '45%', width: '10vw', xPercent: -50, yPercent: -50 },
+    { opacity: 1, duration: 0.05 },
+    0
+  );
+  // Start drawing the line while still small
+  draw(tl, '#spectrum-line', 0.20, 'none', 0);
 
-  // Phase 2: Large spectrum appears at device screen location, small (0.10-0.15)
-  tl.to(spectrumEl, { opacity: 1, duration: 0.05 }, 0.10);
-  // Pre-draw the line at tiny scale so it's visible during zoom
-  draw(tl, '#spectrum-line', 0.15, 'none', 0.10);
-
-  // Phase 3: Spectrum zooms out from device to its final right-side position (0.15-0.40)
-  tl.to(spectrumEl, {
-    left: '55%',
+  // Phase 2: Spectrum zooms out to full size on right side (0.05 - 0.35)
+  tl.to(el, {
+    left: '72%',
     top: '50%',
     width: 'min(42vw, 520px)',
-    transform: 'translate(-50%, -50%)',
-    duration: 0.25,
-    ease: 'power2.inOut',
-  }, 0.15);
+    duration: 0.30,
+    ease: 'power2.out',
+  }, 0.05);
 
-  // Fade out mini screen spectrum as the big one takes over
-  tl.to('#screen-spectrum', { opacity: 0, duration: 0.08 }, 0.18);
+  // Device fades as spectrum takes over (0.10 - 0.30)
+  tl.to('#screen-spectrum', { opacity: 0, duration: 0.08 }, 0.10);
+  tl.to('#device-stage', { opacity: 0, duration: 0.20 }, 0.12);
 
-  // Fade out the device as the graph grows
-  tl.to('#device-stage', { opacity: 0.15, duration: 0.15 }, 0.20);
+  // Phase 3: Axis labels fade in (0.32 - 0.42)
+  tl.fromTo('#axis-x', { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.35);
+  tl.fromTo('#axis-y', { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.35);
 
-  // Phase 4: Axis labels fade in once graph is at full size (0.38-0.48)
-  tl.fromTo('#axis-x', { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.40);
-  tl.fromTo('#axis-y', { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.40);
-
-  // Phase 5: Text fades in (0.50-0.65)
+  // Phase 4: Text fades in on left (0.45 - 0.60)
   tl.fromTo('#spectrum-text',
     { opacity: 0, y: 20 },
     { opacity: 1, y: 0, duration: 0.15 },
-    0.50
+    0.45
   );
 
-  // Phase 6: Text fades out at end — spectrum STAYS visible for use-cases
-  tl.to('#spectrum-text', { opacity: 0, duration: 0.1 }, 0.88);
-  tl.to('#scatter-rays line', { opacity: 0.15, duration: 0.1 }, 0.88);
-
-  // Fully hide device by end
-  tl.to('#device-stage', { opacity: 0, duration: 0.1 }, 0.85);
+  // Phase 5: Hold, then text fades out (0.85 - 0.95). Spectrum stays.
+  tl.to('#spectrum-text', { opacity: 0, duration: 0.10 }, 0.88);
 }
 
-/* ----------------------------------------
-   SECTION 4: USE CASES
-   Pin: 2400px of scroll
-   Cards cycle one at a time, vertically centered
-   Spectrum morphs shape for each card
-   ---------------------------------------- */
+/* ========================================
+   SECTION 4: USE CASES — cards + spectrum morphing
+   ======================================== */
 
 function setupUseCases() {
   const spectrumLine = document.getElementById('spectrum-line');
@@ -349,14 +271,8 @@ function setupUseCases() {
     }
   });
 
-  // Fade in the containing panel
-  tl.fromTo('#section-usecases .pin-left',
-    { opacity: 0 },
-    { opacity: 1, duration: 0.05 },
-    0
-  );
-
-  // Show spectrum label
+  // Show panel and label
+  tl.fromTo('#section-usecases .pin-left', { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0);
   tl.fromTo('#spectrum-label', { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0);
 
   const items = document.querySelectorAll('.usecase-item');
@@ -366,13 +282,11 @@ function setupUseCases() {
   items.forEach((item, i) => {
     const start = i * perItem;
 
-    // Morph spectrum to this card's shape
+    // Morph spectrum
     if (i === 0) {
-      // First card: set to authentic shape (already drawn as this)
       tl.set(spectrumLine, { attr: { points: shapes[0] } }, start);
       tl.set(spectrumLabel, { textContent: labels[0] }, start);
     } else {
-      // Morph polyline shape
       tl.to(spectrumLine,
         { attr: { points: shapes[i] }, duration: perItem * 0.2, ease: 'power2.inOut' },
         start
@@ -380,14 +294,14 @@ function setupUseCases() {
       tl.set(spectrumLabel, { textContent: labels[i] }, start + perItem * 0.01);
     }
 
-    // Fade in card (vertically centered via CSS)
+    // Card fades in
     tl.fromTo(item,
       { opacity: 0, y: 20 },
       { opacity: 1, y: 0, duration: perItem * 0.2 },
       start + perItem * 0.1
     );
 
-    // Fade out card (except last holds a bit longer)
+    // Card fades out (except last)
     if (i < count - 1) {
       tl.to(item,
         { opacity: 0, y: -10, duration: perItem * 0.15 },
@@ -396,17 +310,15 @@ function setupUseCases() {
     }
   });
 
-  // Fade out last card + spectrum at end
-  tl.to(items[count - 1], { opacity: 0, duration: 0.05 }, 0.9);
-  tl.to('#spectrum-display', { opacity: 0, duration: 0.08 }, 0.9);
-  tl.to('#spectrum-label', { opacity: 0, duration: 0.05 }, 0.9);
+  // End: fade out last card + spectrum
+  tl.to(items[count - 1], { opacity: 0, duration: 0.05 }, 0.90);
+  tl.to('#spectrum-display', { opacity: 0, duration: 0.08 }, 0.90);
+  tl.to('#spectrum-label', { opacity: 0, duration: 0.05 }, 0.90);
 }
 
-/* ----------------------------------------
+/* ========================================
    SECTION 5: PRICE
-   Pin: 1000px of scroll
-   Device dims, price reveals
-   ---------------------------------------- */
+   ======================================== */
 
 function setupPrice() {
   const tl = gsap.timeline({
@@ -419,44 +331,28 @@ function setupPrice() {
     }
   });
 
-  // Dim/hide beam and optics
-  tl.to('#beam-group', { opacity: 0, duration: 0.1 }, 0);
-  tl.to('#internal-optics', { opacity: 0, duration: 0.1 }, 0);
-  tl.to('#spectrometer', { scale: 0.7, opacity: 0.2, duration: 0.2 }, 0);
-
-  // Price block fades in
   tl.fromTo('.price-block',
     { opacity: 0, y: 30 },
-    { opacity: 1, y: 0, duration: 0.25 },
-    0.15
+    { opacity: 1, y: 0, duration: 0.3 },
+    0.1
   );
-
-  // Fade spectrometer out fully
-  tl.to('#spectrometer', { opacity: 0, duration: 0.15 }, 0.5);
 }
 
-/* ----------------------------------------
-   NAVIGATION
-   ---------------------------------------- */
+/* ---- NAV ---- */
 
 function setupNav() {
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       const target = document.querySelector(link.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
     });
   });
 }
 
-/* ----------------------------------------
-   WAITLIST FORM
-   ---------------------------------------- */
+/* ---- WAITLIST ---- */
 
 function setupWaitlistForm() {
-  // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
   const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwP2h2fxQ3-8cpJhQjGzd5GEvRuLHjZR-Pxj7uhE-8L7YLqyLDet83fNCmlE_cVjb5Y/exec';
 
   const form = document.getElementById('waitlist-form');
