@@ -175,7 +175,7 @@ function setupBeam() {
     { left: '50%', top: '42%', width: 'min(30vw, 360px)' },
     {
       left: '72%',
-      top: '48%',
+      top: '58%',
       width: 'min(52vw, 580px)',
       ease: 'power1.inOut',
       scrollTrigger: {
