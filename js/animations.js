@@ -170,18 +170,22 @@ function setupDrawIn() {
 
 function setupBeam() {
   // Slide device right + scale up as beam section approaches
-  gsap.to('#device-stage', {
-    left: '68%',
-    top: '42%',
-    width: 'min(52vw, 580px)',
-    ease: 'power1.inOut',
-    scrollTrigger: {
-      trigger: '#section-beam',
-      start: 'top 90%',
-      end: 'top 20%',
-      scrub: true,
+  // Use fromTo to lock both ends — prevents GSAP from reading a stale/zero start value
+  gsap.fromTo('#device-stage',
+    { left: '50%', top: '42%', width: 'min(30vw, 360px)' },
+    {
+      left: '72%',
+      top: '48%',
+      width: 'min(52vw, 580px)',
+      ease: 'power1.inOut',
+      scrollTrigger: {
+        trigger: '#section-beam',
+        start: 'top 90%',
+        end: 'top 20%',
+        scrub: true,
+      }
     }
-  });
+  );
 
   const tl = gsap.timeline({
     scrollTrigger: {
