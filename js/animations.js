@@ -325,6 +325,15 @@ function setupUseCases() {
    ======================================== */
 
 function setupPrice() {
+  // Force-hide spectrum when price section enters — belt and suspenders
+  ScrollTrigger.create({
+    trigger: '#section-price',
+    start: 'top 80%',
+    onEnter: () => {
+      gsap.set('#spectrum-display', { visibility: 'hidden', opacity: 0 });
+    },
+  });
+
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: '#section-price',
