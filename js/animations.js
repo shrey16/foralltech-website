@@ -495,6 +495,7 @@ function setupWaitlistForm() {
       form.hidden = true;
       success.hidden = false;
       status.textContent = '';
+      if (typeof gtag === 'function') gtag('event', 'waitlist_signup', { method: 'form' });
     } catch {
       status.innerHTML = 'Something went wrong. Email <a href="mailto:contact@foralltech.in">contact@foralltech.in</a> instead.';
     }
